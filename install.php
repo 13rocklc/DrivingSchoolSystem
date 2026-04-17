@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 // setting up the database
 $servername="localhost";
 $username="root";
@@ -9,6 +11,8 @@ $sql="CREATE DATABASE IF NOT EXISTS drivingschool";
 $conn->exec($sql);
 $sql="USE drivingschool";
 $conn->exec($sql);
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 echo("DB created successfully<br>");
 
 // create pupils table
@@ -30,24 +34,29 @@ automatic_manual BOOLEAN NOT NULL);
 ");
 $stmt->execute();
 echo("tblPupils created<br>");
-;
-//$hashedpassword=password_hash("password",PASSWORD_DEFAULT);
-//echo($hashedpassword);
 
+
+//create hashed password
+$hashedpassword=password_hash("password",PASSWORD_DEFAULT);
+echo($hashedpassword);
+
+// insert iterative test data
 $stmt=$conn->prepare("INSERT INTO tblPupils 
     (pupil_ID,name,balance,address_line1,address_line2,town_city,county,postcode,contactNumber,DOB,email,password,automatic_manual)
     VALUES
-    (NULL,'William Joyce',100.00,'27 Cedar Close','Wansford Road','Peterborough','Cambridgeshire','PE8 6S','07123456789','2005-03-27','willj@gmail.com','password',True),
-    (NULL,'Tabitha Gurney',62.50,'5 River Cottages','Station Road','Barnack','Lincolnshire','PE9 3DW','07987654321','2007-10-08','gurney01@gmail.com','password',False),
-    (NULL,'Lila Rock',78.00,'Dryden House','Glapthorn Road','Oundle','Cambridgeshire','PE8 4GH','07112233445','2008-09-01','lilarock@gmail.com','password',False)
+    (NULL,'William Joyce',100.00,'27 Cedar Close','Wansford Road','Peterborough','Cambridgeshire','PE8 6S','07123456789','2005-03-27','willj@gmail.com',:password,True),
+    (NULL,'Tabitha Gurney',62.50,'5 River Cottages','Station Road','Barnack','Lincolnshire','PE9 3DW','07987654321','2007-10-08','gurney01@gmail.com',:password,False),
+    (NULL,'Lila Rock',78.00,'Dryden House','Glapthorn Road','Oundle','Cambridgeshire','PE8 4GH','07112233445','2008-09-01','lilarock@gmail.com',:password,False)
     ");
     
-    
+ 
+$stmt->bindParam(":password", $hashedpassword);
 $stmt->execute();
+
 echo("tblPupils ITD inserted<br>");
 
 
-// create instructors table
+ // create instructors table
 $stmt=$conn->prepare("DROP TABLE IF EXISTS tblInstructors;
 CREATE TABLE tblInstructors
 (instructor_ID INT(4) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -73,31 +82,35 @@ sunday_end TIME);
 ");
 $stmt->execute();
 echo("tblInstructors created<br>");
-;
-//$hashedpassword=password_hash("password",PASSWORD_DEFAULT);
-//echo($hashedpassword);
 
+
+//create hashed password
+$hashedpassword=password_hash("password",PASSWORD_DEFAULT);
+echo($hashedpassword);
+
+// insert iterative test data
 $stmt=$conn->prepare("INSERT INTO tblInstructors 
     (instructor_ID,name,contactNumber,email,manager,password,monday_start,monday_end,tuesday_start,tuesday_end,wednesday_start,wednesday_end,thursday_start,thursday_end,friday_start,friday_end,saturday_start,saturday_end,sunday_start,sunday_end)
     VALUES
-    (NULL,'Jason Leaves','07712345678','jasonL@gmail.com',True,'password','08:30:00','18:00:00','08:30:00','18:00:00','08:30:00','18:00:00','08:30:00','18:00:00','08:30:00','18:00:00','10:00:00','19:00:00','11:00:00','15:00:00'),
-    (NULL,'Peter Smith','07771234567','Smith.peter@gmail.com',False,'password','09:00:00','20:00:00','09:00:00','20:00:00','09:00:00','20:00:00','09:00:00','20:00:00','09:00:00','20:00:00','09:30:00','18:00:00','10:00:00','15:00:00')
+    (NULL,'Jason Leaves','07712345678','jasonL@gmail.com',True,:password,'08:30:00','18:00:00','08:30:00','18:00:00','08:30:00','18:00:00','08:30:00','18:00:00','08:30:00','18:00:00','10:00:00','19:00:00','11:00:00','15:00:00'),
+    (NULL,'Peter Smith','07771234567','Smith.peter@gmail.com',False,:password,'09:00:00','20:00:00','09:00:00','20:00:00','09:00:00','20:00:00','09:00:00','20:00:00','09:00:00','20:00:00','09:30:00','18:00:00','10:00:00','15:00:00')
     ");
     
-    
+
+$stmt->bindParam(":password", $hashedpassword);   
 $stmt->execute();
 echo("tblIntructors ITD inserted<br>");
 
 
 // create pupil-instructor table
-$stmt=$conn->prepare("DROP TABLE IF EXISTS tblPupil_Instructor;
-CREATE TABLE tblPupil_Instructor
-(pupil_ID INT(4) NOT NULL,
-instructor_ID INT(4) NOT NULL);
-");
-$stmt->execute();
+$conn->exec("DROP TABLE IF EXISTS tblPupil_Instructor");
+$conn->exec("CREATE TABLE tblPupil_Instructor (
+    pupil_ID INT(4) NOT NULL,
+    instructor_ID INT(4) NOT NULL)"
+);
 echo("tblPupil_Instructor created<br>");
 
+// insert iterative test data
 $stmt=$conn->prepare("INSERT INTO tblPupil_Instructor
     (pupil_ID,instructor_ID)
     VALUES
