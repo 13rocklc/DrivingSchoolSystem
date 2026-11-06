@@ -5,9 +5,11 @@ include_once("connection.php");
 
 try{
     $stmt=$conn->prepare("INSERT INTO tblInstructors
-    (instructor_ID,name,contactNumber,email,password,manager,monday_start,monday_end,tuesday_start,tuesday_end,wednesday_start,wednesday_end,thursday_start,thursday_end,friday_start,friday_end,saturday_start,saturday_end,sunday_start,sunday_end)
+    (instructor_ID,name,contactNumber,email,password,manager,monday_start,monday_end,tuesday_start,tuesday_end,wednesday_start,
+    wednesday_end,thursday_start,thursday_end,friday_start,friday_end,saturday_start,saturday_end,sunday_start,sunday_end)
     VALUES
-    (NULL,:name,:contactNumber,:email,:password,:manager,:monday_start,:monday_end,:tuesday_start,:tuesday_end,:wednesday_start,:wednesday_end,:thursday_start,:thursday_end,:friday_start,:friday_end,:saturday_start,:saturday_end,:sunday_start,:sunday_end)
+    (NULL,:name,:contactNumber,:email,:password,:manager,:monday_start,:monday_end,:tuesday_start,:tuesday_end,:wednesday_start,
+    :wednesday_end,:thursday_start,:thursday_end,:friday_start,:friday_end,:saturday_start,:saturday_end,:sunday_start,:sunday_end)
     ");
     $stmt->bindParam(":name", $_SESSION["name"]);
     $stmt->bindParam(":contactNumber", $_SESSION["contactNumber"]);

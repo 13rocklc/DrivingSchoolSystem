@@ -1,7 +1,6 @@
-
-
 <?php
 session_start(); 
+
 $hashedpassword=password_hash($_POST["password"],PASSWORD_DEFAULT);
 echo($hashedpassword);
 if ($_SERVER["REQUEST_METHOD"] == "POST")
@@ -30,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         Phone number: <input type="text" name="contactNumber"><br>
         Email: <input type="email" name="email"><br>
         Password: <input type="password" name="password"><br>
-        Car number plate: <input type="text" name="car_reg"><br>
+        Car number plate: <input type="text" name="car_reg" maxlength="7"><br>
         Automatic: <input type="radio" name="automatic_manual" value= "1"><br>
         Manual: <input type="radio" name="automatic_manual" value= "0" required><br>
         Manager: <input type="radio" name="manager" value= "1"><br>

@@ -44,7 +44,7 @@ echo($hashedpassword);
 $stmt=$conn->prepare("INSERT INTO tblPupils 
     (pupil_ID,name,balance,address_line1,address_line2,town_city,county,postcode,contactNumber,DOB,email,password,automatic_manual)
     VALUES
-    (NULL,'William Joyce',100.00,'27 Cedar Close','Wansford Road','Peterborough','Cambridgeshire','PE8 6S','07123456789','2005-03-27','willj@gmail.com',:password,True),
+    (NULL,'William Joyce',100.00,'27 Cedar Close','Wansford Road','Peterborough','Cambridgeshire','PE8 6QS','07123456789','2005-03-27','willj@gmail.com',:password,True),
     (NULL,'Tabitha Gurney',62.50,'5 River Cottages','Station Road','Barnack','Lincolnshire','PE9 3DW','07987654321','2007-10-08','gurney01@gmail.com',:password,False),
     (NULL,'Lila Rock',78.00,'Dryden House','Glapthorn Road','Oundle','Cambridgeshire','PE8 4GH','07112233445','2008-09-01','lilarock@gmail.com',:password,False)
     ");
@@ -150,7 +150,8 @@ echo("tblCars ITD inserted<br>");
 // create lessons table
 $stmt=$conn->prepare("DROP TABLE IF EXISTS tblLessons;
 CREATE TABLE tblLessons
-(pupil_ID INT(4) NOT NULL,
+(lesson_ID INT AUTO_INCREMENT PRIMARY KEY,
+pupil_ID INT(4) NOT NULL,
 instructor_ID INT(4) NOT NULL,
 car_reg VARCHAR(7) NOT NULL,
 length DECIMAL(3,1),
@@ -166,11 +167,11 @@ echo("tblLessons created<br>");
 
 
 $stmt=$conn->prepare("INSERT INTO tblLessons
-    (pupil_ID,instructor_ID,car_reg,length,date,start,end,accepted,done,cancelled)
+    (lesson_ID,pupil_ID,instructor_ID,car_reg,length,date,start,end,accepted,done,cancelled)
     VALUES
-    (1,1,'JG67OAS',1,'2026-04-30','09:00:00','10:00:00',DEFAULT,DEFAULT,DEFAULT),
-    (2,2,'AB12CDE',2,'2026-04-29','14:30:00','16:30:30',DEFAULT,DEFAULT,DEFAULT),
-    (3,2,'AB12CDE',1.5,'2026-05-04','14:00:00','15:30:00',DEFAULT,DEFAULT,DEFAULT)
+    (NULL,1,2,'JG67OAS',1,'2027-04-30','09:00:00','10:00:00',DEFAULT,DEFAULT,DEFAULT),
+    (NULL,2,1,'AB12CDE',2,'2027-04-29','14:30:00','16:30:00',DEFAULT,DEFAULT,DEFAULT),
+    (NULL,3,1,'AB12CDE',1.5,'2027-05-04','14:00:00','15:30:00',DEFAULT,DEFAULT,DEFAULT)
     ");
     
     
