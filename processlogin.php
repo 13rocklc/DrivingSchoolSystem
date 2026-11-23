@@ -6,21 +6,23 @@ array_map("htmlspecialchars", $_POST);//sanitises inputs so no html can be injec
 include_once("connection.php");//import equivalent
 
 try{
-  if ($_POST["pupins"] == 0){
-    $stmt=$conn->prepare("SELECT * from tblpupils WHERE email=:email");
-    $stmt->bindParam(":email", $_POST["email"]);
-    $stmt->execute(); 
+    if ($_POST["pupins"] == 0){
+        $stmt=$conn->prepare("SELECT * from tblpupils WHERE email=:email");
+        $stmt->bindParam(":email", $_POST["email"]);
+        $stmt->execute(); 
     }
 
- else if ($_POST["pupins"]  == 1){
-    $stmt=$conn->prepare("SELECT * from tblinstructors WHERE email=:email");
-    $stmt->bindParam(":email", $_POST["email"]);
-    $stmt->execute(); 
+    else if ($_POST["pupins"]  == 1){
+        $stmt=$conn->prepare("SELECT * from tblinstructors WHERE email=:email");
+        $stmt->bindParam(":email", $_POST["email"]);
+        $stmt->execute(); 
     }
 
 
     if ($stmt->rowCount() == 0) {
-        echo("Invalid email ."); 
+        $_SESSION["incorrect"] = 1;
+        header("Location: login.php");
+        
     }else{
         #check password ok..
         while($row=$stmt->fetch(PDO::FETCH_ASSOC))
