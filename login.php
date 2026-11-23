@@ -25,6 +25,7 @@ session_start();
 <?php
 if (isset($_SESSION["incorrect"])){
     echo("Incorrect details. Please try again.");
+    unset($_SESSION["incorrect"]);
 }
 ?>
     

@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 if (!isset($_SESSION["loggedin"])){
@@ -24,12 +23,14 @@ if ($_SESSION["usertype"]!="pupil"){
   <?php
     include_once("connection.php");
       $nextlesson="No upcoming lessons";
+
     try{
       $stmt=$conn->prepare("SELECT date,start,end FROM tbllessons
       WHERE pupil_ID=:pID AND cancelled=0 AND CONCAT(date,' ',start)>=NOW()
       ORDER BY date,start LIMIT 1");
       $stmt->bindParam(":pID", $_SESSION["loggedin"]);
       $stmt->execute();
+
       while($row=$stmt->fetch(PDO::FETCH_ASSOC))
       {
         $nextlesson=date("l jS F",strtotime($row["date"])).", ".date("H:i",strtotime($row["start"]))." - ".date("H:i",strtotime($row["end"]));
@@ -39,6 +40,7 @@ if ($_SESSION["usertype"]!="pupil"){
     {
       echo("error: " . $e->getMessage());
     }
+
     try{
       $stmt=$conn->prepare("SELECT tblpupils.*, tblinstructors.name as insName,
       tblinstructors.contactNumber as insTel, tblinstructors.email as insEmail
@@ -52,6 +54,7 @@ if ($_SESSION["usertype"]!="pupil"){
       {
         echo("<h1>".htmlspecialchars($row["name"])."</h1>");
         echo("Next Lesson: ".$nextlesson."<br><br>");
+
         if ($row["insName"]){
           echo("Instructor: ".htmlspecialchars($row["insName"])."<br>");
           echo("Instructor phone: ".htmlspecialchars($row["insTel"])."<br>");
@@ -59,6 +62,7 @@ if ($_SESSION["usertype"]!="pupil"){
         }else{
           echo("Instructor: Not assigned yet<br>");
         }
+
         echo("Balance: £".number_format($row["balance"],2)."<br>");
         echo("Address: ".htmlspecialchars($row["address_line1"]).", ".htmlspecialchars($row["address_line2"]).", ".htmlspecialchars($row["town_city"]).", ".htmlspecialchars($row["county"]).", ".htmlspecialchars($row["postcode"])."<br><br>");
         echo("Contact me:<br>");
@@ -97,17 +101,20 @@ if ($_SESSION["usertype"]!="pupil"){
   <?php
   include_once("connection.php");
   $nextlesson="No upcoming lessons";
+
   try{
     $stmt=$conn->prepare("SELECT date,start,end FROM tbllessons
     WHERE pupil_ID=:pID AND cancelled=0 AND CONCAT(date,' ',start)>=NOW()
     ORDER BY date,start LIMIT 1");
     $stmt->bindParam(":pID", $_SESSION["loggedin"]);
     $stmt->execute();
+
     while($row=$stmt->fetch(PDO::FETCH_ASSOC))
     {
       $nextlesson=date("l jS F",strtotime($row["date"])).", ".date("H:i",strtotime($row["start"]))." - ".date("H:i",strtotime($row["end"]));
     }
   }
+
   catch(PDOException $e)
   {
     echo("error: " . $e->getMessage());
@@ -130,9 +137,11 @@ try{
       echo("Instructor: ".htmlspecialchars($row["insName"])."<br>");
       echo("Instructor phone: ".htmlspecialchars($row["insTel"])."<br>");
       echo("Instructor email: ".htmlspecialchars($row["insEmail"])."<br>");
+
     }else{
       echo("Instructor: Not assigned yet<br>");
     }
+
     echo("Balance: £".number_format($row["balance"],2)."<br>");
     echo("Address: ".htmlspecialchars($row["address_line1"]).", ".htmlspecialchars($row["address_line2"]).", ".htmlspecialchars($row["town_city"]).", ".htmlspecialchars($row["county"]).", ".htmlspecialchars($row["postcode"])."<br><br>");
     echo("Contact me:<br>");
